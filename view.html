@@ -7,41 +7,39 @@ body{
   background-color: #ddf;
 }
 .ranking{
-  display:flex;
-  flex-wrap:wrap;
+  column-count:5;
+  column-fill: auto;
 }
-.ranking div{
-  width:12%;
-  margin:0.2em;
+.ranking .piece{
+  display:inline-block;
+  width:100%;
 }
 .piece{
   position: relative;
   border:solid 3px #aaf;
-  border-radius: 15px;
   font-size: small;
   background-color: #fff;
-  height: 240px;
-
 }
 .piece blockquote{
   margin:0px;
   padding:0px;
 }
-.piece table{
-  font-size: x-small;
+.piece .image-wrap{
 }
-
+.piece .body{
+  background-color: #dff;
+}
 .piece img{
+  /*
   width:100%;
   height:100%;
   object-fit: scale-down;
+  */
+  height: auto; 
+  width: 100%;
 }
 
 .piece div{
-  position:absolute;
-  bottom:0px;
-  width: 100%;
-  background-color: rgba(255,255,255,0.1);
 }
 #trends{
   display:flex;
@@ -51,6 +49,9 @@ body{
   border:solid 1px;
   margin: 0.2em;
   padding:0.1em;
+}
+.ads-wrap{
+  display:inline-block;
 }
 .ads{
   display:flex;
@@ -62,10 +63,9 @@ body{
   background-color: #dfd;
   margin: 0.2em;
   padding:0.1em;
-  height: 100px;
 }
 .ad img{
-  height:100px;
+  height:120px;
   width:auto;
 }
 .trend-head{
@@ -250,7 +250,7 @@ xhr("data/"+ searchStr + ".json",function(s){
   contents.appendChild(currentElm);
 
   obj.ranking.forEach(function(e, i){
-    if(i > 20 - 1){return;}
+    if(i > 30 - 1){return;}
     console.log(e.url, e.count, e.retweet, e.twit);
     var name = "callback_" + Math.random().toString(36).slice(-8);
     var url = "https://api.twitter.com/1/statuses/oembed.json";
@@ -258,20 +258,22 @@ xhr("data/"+ searchStr + ".json",function(s){
     var contents = document.getElementById("contents");
     jsonp(name, url, function(data){
       console.log(data)
+      var m = data.html.match(/<p lang="ja" dir="ltr">(.*?)<\/p>/);
 
       if(index % 14 == 0){
         var ads = document.createElement("div");
+        ads.className = "ads-wrap";
         pushAds(ads, trendStrings);
-        contents.appendChild(ads);
+        currentElm.appendChild(ads);
 
-        currentElm = makeRankingElm();
-        contents.appendChild(currentElm);
+        //currentElm = makeRankingElm();
+        //contents.appendChild(currentElm);
       }
       index ++;
 
       var elm = document.createElement("div");
       elm.className = "piece";
-      elm.innerHTML = '<img src="'+e.url+':small"><div>' + data.html + '</div>';
+      elm.innerHTML = '<div class="image-wrap"><img src="'+e.url+':small"></div><div class="body">' + m[1] + '</div>';
       currentElm.appendChild(elm);
       //twttr.widgets.load();
     });
