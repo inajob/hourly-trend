@@ -323,7 +323,7 @@ xhr("data/"+ searchStr + ".json",function(s){
       var m = data.html.match(/<p lang="ja" dir="ltr">(.*?)<\/p>/);
       var twit = m[1].replace(/<a href="https:\/\/[^>"]*">pic.twitter.com\/[^<]*<\/a>/,"");
 
-      if(index % 14 == 0){
+      if(index % 5 == 0){
         var ads = document.createElement("div");
         ads.className = "ads-wrap";
         pushAds(ads, trendStrings);
