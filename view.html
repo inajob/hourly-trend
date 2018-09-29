@@ -10,6 +10,13 @@ body{
   column-count:5;
   column-fill: auto;
 }
+
+@media screen and (max-width:1024px) {
+.ranking{
+  column-count:2;
+}
+}
+
 .ranking .piece{
   display:inline-block;
   width:100%;
@@ -61,12 +68,16 @@ body{
 .ad{
   border:solid 3px green;
   background-color: #dfd;
-  margin: 0.2em;
-  padding:0.1em;
+  margin: 0.1em;
+  padding:0em;
+  width:28%;
 }
 .ad img{
+  /*
   height:120px;
   width:auto;
+  */
+  width: 100%;
 }
 .trend-head{
   border:solid 3px #afa;
