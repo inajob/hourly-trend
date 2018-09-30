@@ -58,8 +58,11 @@ body{
 }
 .piece .retweet{
   background-color:#66f;
-  margin-right:1em;
   color:white;
+}
+.piece .twitter-profile-img{
+  width:32px;
+  height:32px;
 }
 
 .piece div{
@@ -336,7 +339,7 @@ xhr("data/"+ searchStr + ".json?" + Math.random().toString(36).slice(-8),functio
     url += "?omit_script=true&url="+encodeURIComponent(e.twit)+'&callback=' + name;
     var contents = document.getElementById("contents");
     jsonp(name, url, function(data){
-      console.log(data)
+      console.log(e,data)
       var m = data.html.match(/<p lang=".*" dir="ltr">(.*?)<\/p>/);
       var twit = m[1].replace(/<a href="https:\/\/[^>"]*">pic.twitter.com\/[^<]*<\/a>/,"");
 
@@ -357,6 +360,7 @@ xhr("data/"+ searchStr + ".json?" + Math.random().toString(36).slice(-8),functio
         '<img class="twitter-logo" src="twitter.png">'+
         '<div class="twitter-header">' + 
         '<div class="retweet">'+e.retweet+'RT</div>'+
+        '<img class="twitter-profile-img" src="' + e.profile_image + '">' + 
         '<a href="' + data.author_url + '" target="_blank"><div>' + data.author_name + '</div></a>' + 
         '</div>' +
         '<div class="body">' + twit + '</div>' +
