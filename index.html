@@ -304,7 +304,7 @@ nextBtn2.addEventListener("click",function(e){
 
 
 var searchStr = fileDate.getFullYear() + ("0" + (fileDate.getMonth() + 1)).slice(-2) + ("0" + fileDate.getDate()).slice(-2) + "-" + ("0" + fileDate.getHours()).slice(-2);
-xhr("data/"+ searchStr + ".json",function(s){
+xhr("data/"+ searchStr + ".json?" + Math.random().toString(36).slice(-8),function(s){
   var obj = JSON.parse(s);
   console.log(obj)
   var trends = document.getElementById("trends");
