@@ -309,17 +309,21 @@ xhr("data/"+ searchStr + ".json",function(s){
   console.log(obj)
   var trends = document.getElementById("trends");
   var trendStrings = [];
-  obj.trends[0].trends.forEach(function(e, i){
-    if(i > 10){return;}
-    var aElm = document.createElement("a");
-    var elm = document.createElement("div");
-    elm.appendChild(document.createTextNode(e.name));
-    aElm.appendChild(elm);
-    aElm.href=e.url;
-    aElm.target="_blacnk";
-    trends.appendChild(aElm);
-    trendStrings.push(e.name);
-  });
+  if(obj.trends != null){
+    obj.trends[0].trends.forEach(function(e, i){
+      if(i > 10){return;}
+      var aElm = document.createElement("a");
+      var elm = document.createElement("div");
+      elm.appendChild(document.createTextNode(e.name));
+      aElm.appendChild(elm);
+      aElm.href=e.url;
+      aElm.target="_blank";
+      trends.appendChild(aElm);
+      trendStrings.push(e.name);
+    });
+  }else{
+    trendStrings = ["新聞","毎時","Web","Twitter"];
+  }
   var index = 0;
   var currentElm = makeRankingElm();
   contents.appendChild(currentElm);
