@@ -337,7 +337,7 @@ xhr("data/"+ searchStr + ".json",function(s){
     var contents = document.getElementById("contents");
     jsonp(name, url, function(data){
       console.log(data)
-      var m = data.html.match(/<p lang="ja" dir="ltr">(.*?)<\/p>/);
+      var m = data.html.match(/<p lang=".*" dir="ltr">(.*?)<\/p>/);
       var twit = m[1].replace(/<a href="https:\/\/[^>"]*">pic.twitter.com\/[^<]*<\/a>/,"");
 
       if(index % 5 == 0){
