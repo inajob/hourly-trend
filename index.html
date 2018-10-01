@@ -333,6 +333,7 @@ xhr("data/"+ searchStr + ".json?" + Math.random().toString(36).slice(-8),functio
 
   obj.ranking.forEach(function(e, i){
     if(i > 30 - 1){return;}
+    if(e.retweet<3){return;}
     console.log(e.url, e.count, e.retweet, e.twit);
     var name = "callback_" + Math.random().toString(36).slice(-8);
     var url = "https://api.twitter.com/1/statuses/oembed.json";
