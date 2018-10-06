@@ -355,6 +355,37 @@ xhr("data/"+ searchStr + ".json?" + Math.random().toString(36).slice(-8),functio
       }
       index ++;
 
+      var imgString = '<div class="image-wrap"><img class="twitter-img" src="'+e.url+':small"></div>';
+      var useImageUrls = false;
+      e.image_urls.forEach(function(img){
+        if(img.indexOf(".jpg") != -1){
+          useImageUrls = true;
+        }
+      });
+      if(useImageUrls){
+        imgString = "";
+        e.image_urls.forEach(function(img){
+          imgString += '<div class="image-wrap"><img class="twitter-img" src="'+img+':small"></div>';
+        });
+      }
+      if(e.videos){
+        e.videos.forEach(function(videos){
+          var videoContent = null;
+          if(videos.variants != null){
+            videos.variants.forEach(function(v){
+              if(v.content_type == "video/mp4" && (videoContent == null || videoContent.bitrate > v.bitrate)){
+                videoContent = v;
+              }
+            });
+          }
+          if(videoContent != null){
+            imgString = "";
+            imgString += '<div class="image-wrap"><video class="twitter-img" src="' + videoContent.url + '" controls muted autoplay loop></div>';
+          }
+        });
+
+      }
+
       var elm = document.createElement("div");
       elm.className = "piece";
       elm.innerHTML = '' + 
@@ -365,7 +396,9 @@ xhr("data/"+ searchStr + ".json?" + Math.random().toString(36).slice(-8),functio
         '<a href="' + data.author_url + '" target="_blank"><div>' + data.author_name + '</div></a>' + 
         '</div>' +
         '<div class="body">' + twit + '</div>' +
-        '<a href="'+e.twit+'" target="_blank"><div class="image-wrap"><img class="twitter-img" src="'+e.url+':small"></div></a>'+
+        '<a href="'+e.twit+'" target="_blank">' + 
+        imgString +
+        '</a>'+
         '';
       currentElm.appendChild(elm);
 
