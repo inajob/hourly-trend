@@ -341,6 +341,10 @@ xhr("data/"+ searchStr + ".json?" + Math.random().toString(36).slice(-8),functio
     var contents = document.getElementById("contents");
     jsonp(name, url, function(data){
       console.log(e,data)
+      if(data.author_name.search(/[가-힣]/) != -1 || data.html.search(/[가-힣]/) != -1){
+        console.log("filter");
+        return;
+      }
       var m = data.html.match(/<p lang=".*" dir="ltr">(.*?)<\/p>/);
       var twit = m[1].replace(/<a href="https:\/\/[^>"]*">pic.twitter.com\/[^<]*<\/a>/,"");
 
