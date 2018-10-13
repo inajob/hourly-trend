@@ -1,0 +1,468 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<title>画像新聞</title>
+<meta property="og:title" content="画像新聞" />
+<meta property="og:type" content=" website" />
+<meta property="og:url" content="http://page.inajob.tk/maiji/daily.html" />
+<meta property="og:image" content="http://page.inajob.tk/maiji/logo.png" />
+<meta property="og:site_name" content="画像新聞" />
+<meta property="og:description" content="1日ごとの流行画像をまとめるWebサービスです" />
+<meta name="twitter:card" content=" summary" />
+
+<script src="https://platform.twitter.com/widgets.js"></script>
+<style>
+body{
+  background-color: #eed;
+}
+.ranking{
+  column-count:5;
+  column-fill: auto;
+}
+
+@media screen and (max-width:1024px) {
+.ranking{
+  column-count:2;
+}
+}
+
+.ranking .piece{
+  display:inline-block;
+  width:100%;
+}
+.piece{
+  border:solid 1px;
+  position: relative;
+  font-size: small;
+  background-color: #fff;
+  margin-bottom:1em;
+}
+.piece blockquote{
+  margin:0px;
+  padding:0px;
+}
+.piece .image-wrap{
+}
+.piece .body{
+  background-color: #def;
+  padding: 0.2em;
+}
+.piece .twitter-img{
+  /*
+  width:100%;
+  height:100%;
+  object-fit: scale-down;
+  */
+  height: auto; 
+  width: 100%;
+}
+.piece .retweet{
+  background-color:#66f;
+  color:white;
+}
+.piece .twitter-profile-img{
+  width:32px;
+  height:32px;
+}
+
+.piece div{
+}
+.twitter-logo{
+  position:absolute;
+  right:0px;
+  width:16px;
+  height:16px;
+}
+.twitter-header{
+  display:flex;
+}
+#trends{
+  display:flex;
+  flex-wrap:wrap;
+  margin:2em;
+  font-size: large;
+}
+#trends div{
+  border:solid 1px;
+  margin: 0.2em;
+  padding:0.3em;
+  background-color:#fff;
+}
+.ads-wrap{
+  display:inline-block;
+}
+.ads{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.ad{
+  border:solid 3px green;
+  background-color: #dfd;
+  margin: 0.1em;
+  padding:0em;
+  width:28%;
+}
+.ad img{
+  /*
+  height:120px;
+  width:auto;
+  */
+  width: 100%;
+}
+.trend-head{
+  border:solid 3px #afa;
+  border-radius: 100px;
+
+  background-color: #efe;
+  padding-top: 10px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+
+  font-size: large;
+  border: none;
+  width:5em;
+  text-align: center;
+}
+#date{
+  font-size: x-large;
+}
+
+h1{
+  text-align:center;
+}
+a{
+  color: #333;
+}
+.control{
+  display:flex;
+}
+.button{
+  border:solid #330 3px;
+  padding: 1em;
+  background-color:#fff;
+  cursor:pointer;
+}
+.left{
+  margin-right:auto;
+}
+.right{
+  margin-left:auto;
+}
+.center{
+  text-align:center;
+}
+.tar{
+  text-align:right;
+}
+
+</style>
+</head>
+<body>
+<div class="tar">
+<a href="http://b.hatena.ne.jp/entry/page.inajob.tk/maiji/" class="hatena-bookmark-button" data-hatena-bookmark-layout="basic-label" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+<a href="https://twitter.com/share?hashtags=maiji" class="twitter-share-button" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</div>
+<div class="control">
+  <div id="back-btn" class="button left">&lt; 1日前</div>
+  <a href="?"><h1>- 画像新聞 -</h1></a>
+  <div id="next-btn" class="button right">&gt; 1日後</div>
+</div>
+<div class="center" id="date">xxxx-xx-xx</div>
+<div id="trends">
+</div>
+
+
+<div id="contents">
+</div>
+<div class="control">
+  <div id="back-btn2" class="button left">&lt; 1日前</div>
+  <div id="next-btn2" class="button right">&gt; 1日後</div>
+</div>
+<hr/>
+<div class="tar">作った人: <a href="http://twitter.com/ina_ani">@ina_ani</a><a href="https://twitter.com/ina_ani" class="twitter-follow-button" data-show-count="false">Follow @ina_ani</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div>
+
+<script>
+function xhr(url, f){
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true);
+  xhr.onreadystatechange = function(o){
+    if (xhr.readyState === 4 && xhr.status === 200){
+      f(xhr.responseText)
+    }
+    if (xhr.readyState === 4 && xhr.status === 404){
+      f("{}")
+    }
+  };
+  xhr.send(null);
+}
+
+function jsonp(name, src, f){
+  window[name] = function(data){
+    f(data);
+  }
+  var script = document.createElement("script");
+  script.type = "text/javascript";
+  script.async = true;
+  script.src = src;
+  document.body.appendChild(script);
+}
+function choice(arr){
+  var r = Math.floor(Math.random() * arr.length);
+  return arr[r];
+}
+
+function pushAds(parent, trendStrings, level){
+  level = (level || 0);
+  var ads = document.createElement("div");
+  ads.className = "ads";
+  var name = "callback_ads" + Math.random().toString(36).slice(-8);
+  var tr = choice(trendStrings);
+  var exitFlag = false;
+  jsonp(name, "http://web.inajob.tk/ad/amz.php?callback=" + name + "&q=" + encodeURIComponent(tr), function(data){
+    //console.log(data);
+    if(data.length == 0){
+      if(level < 10){
+        pushAds(parent, trendStrings, level + 1)
+      }
+      return;
+    }
+    var elm = document.createElement("div");
+    elm.className = "trend-head";
+    elm.innerHTML = tr;
+    ads.appendChild(elm);
+
+    data.forEach(function(e){
+      //console.log(e)
+      if(e.link && e.mimage){
+        var elm = document.createElement("div");
+        elm.className = "ad";
+        elm.innerHTML = '<a href="'+ e.link[0] +'" target="_blank"><img src="'+ e.mimage[0] + '"></a>';
+        ads.appendChild(elm);
+      }
+      //console.log(elm)
+    });
+    parent.appendChild(ads);
+  });
+}
+
+function makeRankingElm(){
+  var e = document.createElement("div");
+  e.className = "ranking";
+  return e;
+}
+
+var search = document.location.search.replace("?","");
+var year = parseInt(search.substring(0,4));
+var month = parseInt(search.substring(4,6));
+var date = parseInt(search.substring(6,8));
+
+var rawDate = new Date();
+rawDate.setHours(rawDate.getHours());
+var fileDate = new Date();
+fileDate.setHours(fileDate.getHours() - 9);
+
+if(!isNaN(year) && !isNaN(month) && !isNaN(date)){
+  rawDate = new Date(year, month - 1, date, 0, 0, 0);
+  rawDate.setHours(rawDate.getHours() + 9);
+
+  fileDate = new Date(year, month - 1, date, 0, 0, 0);
+}
+
+var dateStr = rawDate.getFullYear() + "/" + (rawDate.getMonth() + 1) + "/" + rawDate.getDate() + "のトレンドと注目されていた画像です";
+
+var dateElm = document.getElementById("date");
+dateElm.innerHTML = dateStr;
+
+function backPage(){
+  rawDate.setHours(rawDate.getHours() - 24 - 9);
+  var searchStr = rawDate.getFullYear() + ("0" + (rawDate.getMonth() + 1)).slice(-2) + ("0" + rawDate.getDate()).slice(-2);
+  document.location.href="?" + searchStr;
+}
+function nextPage(){
+  rawDate.setHours(rawDate.getHours() + 24 - 9);
+  var searchStr = rawDate.getFullYear() + ("0" + (rawDate.getMonth() + 1)).slice(-2) + ("0" + rawDate.getDate()).slice(-2);
+  document.location.href="?" + searchStr;
+}
+
+var backBtn = document.getElementById("back-btn");
+var nextBtn = document.getElementById("next-btn");
+var backBtn2 = document.getElementById("back-btn2");
+var nextBtn2 = document.getElementById("next-btn2");
+
+
+backBtn.addEventListener("click",function(e){
+  backPage();
+});
+
+backBtn2.addEventListener("click",function(e){
+  backPage();
+});
+
+nextBtn.addEventListener("click",function(e){
+  nextPage();
+});
+nextBtn2.addEventListener("click",function(e){
+  nextPage();
+});
+
+// fileDate
+fileDate.setHours(fileDate.getHours() - (new Date()).getHours());
+var counter = 0;
+var allRanking = [];
+var allTrends = [];
+
+function margeArr(orig, neo){
+  neo.forEach(function(o){orig = marge(orig, o)});
+  return orig;
+}
+function marge(arr, obj){
+  var addFlag = true;
+  arr.forEach(function(o,i){
+    if(obj.twit == o.twit){
+      if(obj.retweet < o.retweet){
+        arr[i] = o;  // insert
+      }
+      addFlag = false;
+    }
+  })
+  if(addFlag){
+    arr.push(obj);
+  }
+  return arr;
+}
+
+for(i = 0; i < 24; i ++){
+  fileDate.setHours(fileDate.getHours() + 1);
+  var searchStr = fileDate.getFullYear() + ("0" + (fileDate.getMonth() + 1)).slice(-2) + ("0" + fileDate.getDate()).slice(-2) + "-" + ("0" + fileDate.getHours()).slice(-2);
+  xhr("data/"+ searchStr + ".json?" + Math.random().toString(36).slice(-8),function(s){
+    var obj;
+    try{
+      obj = JSON.parse(s);
+    }catch(e){
+      obj = {};
+    }
+    console.log(obj);
+    if(obj.ranking){
+      allRanking = margeArr(allRanking,obj.ranking);
+    }
+    if(obj.trends){
+      allTrends = allTrends.concat(obj.trends[0].trends);
+    }
+    counter ++;
+    if(counter == 24){
+      console.log("finish")
+      allRanking.sort(function(a,b){return b.retweet - a.retweet})
+      draw(allRanking, allTrends)
+    }
+  });
+}
+function draw(ranking, trends){
+  console.log(ranking)
+
+  var trendsElm = document.getElementById("trends");
+  var trendStrings = [];
+  if(trends != null){
+    trends.forEach(function(e, i){
+      if(i > 10){return;}
+      var aElm = document.createElement("a");
+      var elm = document.createElement("div");
+      elm.appendChild(document.createTextNode(e.name));
+      aElm.appendChild(elm);
+      aElm.href=e.url;
+      aElm.target="_blank";
+      trendsElm.appendChild(aElm);
+      trendStrings.push(e.name);
+    });
+  }else{
+    trendStrings = ["新聞","毎時","Web","Twitter"];
+  }
+
+  var index = 0;
+  var currentElm = makeRankingElm();
+  contents.appendChild(currentElm);
+
+  ranking.forEach(function(e, i){
+    if(i > 30 - 1){return;}
+    if(e.retweet<3){return;}
+    console.log(e.url, e.count, e.retweet, e.twit);
+    var name = "callback_" + Math.random().toString(36).slice(-8);
+    var url = "https://api.twitter.com/1/statuses/oembed.json";
+    url += "?omit_script=true&url="+encodeURIComponent(e.twit)+'&callback=' + name;
+    var contents = document.getElementById("contents");
+    jsonp(name, url, function(data){
+      console.log(e,data)
+      if(data.author_name.search(/[가-힣]/) != -1 || data.html.search(/[가-힣]/) != -1){
+        console.log("filter");
+        return;
+      }
+      var m = data.html.match(/<p lang=".*" dir="ltr">(.*?)<\/p>/);
+      var twit = m[1].replace(/<a href="https:\/\/[^>"]*">pic.twitter.com\/[^<]*<\/a>/,"");
+
+      if(index % 5 == 0){
+        var ads = document.createElement("div");
+        ads.className = "ads-wrap";
+        pushAds(ads, trendStrings);
+        currentElm.appendChild(ads);
+
+        //currentElm = makeRankingElm();
+        //contents.appendChild(currentElm);
+      }
+      index ++;
+
+      var imgString = '<div class="image-wrap"><img class="twitter-img" src="'+e.url+':small"></div>';
+      var useImageUrls = false;
+      if(e.image_urls){
+        e.image_urls.forEach(function(img){
+          if(img.indexOf(".jpg") != -1){
+            useImageUrls = true;
+          }
+        });
+      }
+      if(useImageUrls){
+        imgString = "";
+        e.image_urls.forEach(function(img){
+          imgString += '<div class="image-wrap"><img class="twitter-img" src="'+img+':small"></div>';
+        });
+      }
+      if(e.videos){
+        e.videos.forEach(function(videos){
+          var videoContent = null;
+          if(videos.variants != null){
+            videos.variants.forEach(function(v){
+              if(v.content_type == "video/mp4" && (videoContent == null || videoContent.bitrate > v.bitrate)){
+                videoContent = v;
+              }
+            });
+          }
+          if(videoContent != null){
+            imgString = "";
+            imgString += '<div class="image-wrap"><video class="twitter-img" src="' + videoContent.url + '" controls muted autoplay loop></div>';
+          }
+        });
+
+      }
+
+      var elm = document.createElement("div");
+      elm.className = "piece";
+      elm.innerHTML = '' + 
+        '<img class="twitter-logo" src="twitter.png">'+
+        '<div class="twitter-header">' + 
+        '<div class="retweet">'+e.retweet+'RT</div>'+
+        '<img class="twitter-profile-img" src="' + e.profile_image + '">' + 
+        '<a href="' + data.author_url + '" target="_blank"><div>' + data.author_name + '</div></a>' + 
+        '</div>' +
+        '<div class="body">' + twit + '</div>' +
+        '<a href="'+e.twit+'" target="_blank">' + 
+        imgString +
+        '</a>'+
+        '';
+      currentElm.appendChild(elm);
+
+    });
+  });
+}
+
+</script>
+</body>
+</html>
