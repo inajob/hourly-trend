@@ -1,19 +1,20 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>毎時新聞</title>
-<meta property="og:title" content="毎時新聞" />
+<title>裏毎時新聞</title>
+<meta property="og:title" content="裏毎時新聞" />
 <meta property="og:type" content=" website" />
-<meta property="og:url" content="http://page.inajob.tk/maiji/" />
+<meta property="og:url" content="http://page.inajob.tk/maiji/r18.html" />
 <meta property="og:image" content="http://page.inajob.tk/maiji/logo.png" />
-<meta property="og:site_name" content="毎時新聞" />
-<meta property="og:description" content="1時間ごとの流行画像をまとめるWebサービスです" />
+<meta property="og:site_name" content="裏毎時新聞" />
+<meta property="og:description" content="1時間ごとの流行画像をまとめるWebサービスの裏バージョンです" />
 <meta name="twitter:card" content=" summary" />
 
 <script src="https://platform.twitter.com/widgets.js"></script>
 <style>
 body{
-  background-color: #eed;
+  background-color: #333;
+  color: white;
 }
 .ranking{
   column-count:5;
@@ -36,7 +37,21 @@ body{
   font-size: small;
   background-color: #fff;
   margin-bottom:1em;
+  color: #000;
 }
+#trends a{
+  color:red;
+}
+.piece a{
+  color:red;
+}
+.trend-head{
+  color:red;
+}
+.control{
+  color:red;
+}
+
 .piece blockquote{
   margin:0px;
   padding:0px;
@@ -132,7 +147,7 @@ h1{
   text-align:center;
 }
 a{
-  color: #333;
+  color: #eee;
 }
 .control{
   display:flex;
@@ -165,10 +180,11 @@ a{
 </div>
 <div class="control">
   <div id="back-btn" class="button left">&lt; 1時間前</div>
-  <a href="?"><h1>- 毎時新聞 -</h1></a>
+  <a href="?"><h1>- 裏毎時新聞 -</h1></a>
   <div id="next-btn" class="button right">&gt; 1時間後</div>
 </div>
 <div class="center" id="date">xxxx-xx-xx 00</div>
+<div class="center"><a href="/">普通のやつはこちら</a></div>
 <div id="trends">
 </div>
 
@@ -268,7 +284,7 @@ if(!isNaN(hour) && !isNaN(year) && !isNaN(month) && !isNaN(date)){
   fileDate = new Date(year, month - 1, date, hour, 0, 0);
 }
 
-var dateStr = rawDate.getFullYear() + "/" + (rawDate.getMonth() + 1) + "/" + rawDate.getDate() + " " + rawDate.getHours() + "時のトレンドと注目されていた画像です";
+var dateStr = rawDate.getFullYear() + "/" + (rawDate.getMonth() + 1) + "/" + rawDate.getDate() + " " + rawDate.getHours() + "時のトレンドと注目されていた画像(裏)です";
 
 var dateElm = document.getElementById("date");
 dateElm.innerHTML = dateStr;
@@ -332,9 +348,9 @@ xhr("data/"+ searchStr + "-scored.json?" + Math.random().toString(36).slice(-8),
   contents.appendChild(currentElm);
 
   obj.ranking.forEach(function(e, i){
-    if(i > 30 - 1){return;}
-    if(e.retweet<5){return;}
-    if(e.score>0.3){return;}
+    //if(i > 40 - 1){return;}
+    //if(e.retweet<3){return;}
+    if(e.score<0.3){return;}
     console.log(e.url, e.count, e.retweet, e.twit);
     var name = "callback_" + Math.random().toString(36).slice(-8);
     var url = "https://api.twitter.com/1/statuses/oembed.json";
