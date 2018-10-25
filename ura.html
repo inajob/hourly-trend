@@ -344,6 +344,7 @@ xhr("data/"+ searchStr + "-scored.json?" + Math.random().toString(36).slice(-8),
     trendStrings = ["新聞","毎時","Web","Twitter"];
   }
   var index = 0;
+  var fastIndex = 0;
   var currentElm = makeRankingElm();
   contents.appendChild(currentElm);
 
@@ -351,6 +352,8 @@ xhr("data/"+ searchStr + "-scored.json?" + Math.random().toString(36).slice(-8),
     //if(i > 40 - 1){return;}
     //if(e.retweet<3){return;}
     if(e.score<0.3){return;}
+    if(e.image_urls == null || e.image_urls.length == 0){return;}
+    fastIndex ++;
     console.log(e.url, e.count, e.retweet, e.twit);
     var name = "callback_" + Math.random().toString(36).slice(-8);
     var url = "https://api.twitter.com/1/statuses/oembed.json";
