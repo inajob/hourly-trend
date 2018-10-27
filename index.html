@@ -9,20 +9,49 @@
 <meta property="og:site_name" content="毎時新聞" />
 <meta property="og:description" content="1時間ごとの流行画像をまとめるWebサービスです" />
 <meta name="twitter:card" content=" summary" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 
 <script src="https://platform.twitter.com/widgets.js"></script>
 <style>
 body{
   background-color: #eed;
 }
+.rel{
+  position:relative;
+}
 .ranking{
   column-count:5;
   column-fill: auto;
+  margin-right: 20%;
+}
+.side{
+  position:absolute;
+  top:0px;
+  right: 0px;
+  width: 19%;
+  font-size: 0.8em;
+  background-color: #eff;
+}
+.side .url-piece{
+  background-color:#fff;
+  margin:3px;
+  border:solid blue;
+  padding-left:3px;
+  border-width: 0px 0px 0px 5px;
+}
+span.retweet{
+  background-color:#66f;
+  color:white;
 }
 
 @media screen and (max-width:1024px) {
+.side{
+  position:relative;
+  width: 100%;
+}
 .ranking{
   column-count:2;
+  margin-right: 0%;
 }
 }
 
@@ -96,7 +125,6 @@ body{
 #trends{
   display:flex;
   flex-wrap:wrap;
-  margin:2em;
   font-size: large;
 }
 #trends div{
@@ -188,10 +216,11 @@ a{
 <div class="center" id="date">xxxx-xx-xx 00</div>
 <div id="trends">
 </div>
-<div id="contents">
-</div>
-<h2>URLを含むトレンド</h2>
-<div class="urls" id="urls2">
+<div class="rel">
+  <div id="contents">
+  </div>
+  <div class="side" id="urls2">
+  </div>
 </div>
 
 
@@ -353,50 +382,20 @@ xhr("data/"+ searchStr + "-scored.json?" + Math.random().toString(36).slice(-8),
   var currentElm = makeRankingElm();
   contents.appendChild(currentElm);
 
-  /*
-  var urls = document.getElementById("urls");
-  if(obj.urlRanking){
-    var index = 0
-    obj.urlRanking.forEach(function(e,i){
-      var rt = e.retweet
-      if(e.urls && rt > 30){
-      if(index > 10){return}
-      index ++;
-
-        var name = "callback_" + Math.random().toString(36).slice(-8);
-        var url = "https://api.twitter.com/1/statuses/oembed.json";
-        url += "?omit_script=true&url="+encodeURIComponent(e.twit)+'&callback=' + name;
-        var contents = document.getElementById("contents");
-        jsonp(name, url, function(data){
-          console.log(e,data)
-          var elm = document.createElement("div");
-          elm.innerHTML = '<div class="piece"><div class="retweet">RT' + rt +'</div>' + data.html + '</div>'
-          urls.appendChild(elm);
-        });
-      }
-    });
-
-  }
-  */
-
   var urls2 = document.getElementById("urls2");
   index = 0
   obj.ranking.forEach(function(e,i){
     var rt = e.retweet
-    if(e.urls && rt > 30){
-    if(index > 10){return}
-    index ++;
-
-      var name = "callback_" + Math.random().toString(36).slice(-8);
-      var url = "https://api.twitter.com/1/statuses/oembed.json";
-      url += "?omit_script=true&url="+encodeURIComponent(e.twit)+'&callback=' + name;
-      var contents = document.getElementById("contents");
-      jsonp(name, url, function(data){
-        console.log(e,data)
-        var elm = document.createElement("div");
-        elm.innerHTML = '<div class="piece"><div class="retweet">RT' + rt +'</div>' + data.html + '</div>'
-        urls2.appendChild(elm);
-      });
+    if(e.urls && (e.urls.length >=1 && e.urls[0].indexOf("https://twitter.com/") != 0) && rt > 30){
+    if(index > 100){return}
+      index ++;
+      var elm = document.createElement("div");
+      var url = e.urls[0]
+      var title = e.urls[0]
+      if(e.ogp && e.ogp.url)url = e.ogp.url;
+      if(e.ogp && e.ogp.title)title = e.ogp.title;
+      elm.innerHTML = '<div class="url-piece"><img src="https://cdn-ak.favicon.st-hatena.com/?url='+encodeURIComponent(url)+'"><a href="' + url + '">' + title + '</a><span class="retweet">RT' +rt+ '</span></div>'
+      urls2.appendChild(elm);
     }
   });
 
